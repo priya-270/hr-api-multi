@@ -1,0 +1,23 @@
+@Library('jhc') _
+pipeline {
+    agent any
+
+    stages {
+        stage('gitchekout') {
+            steps {
+                git branch: "{main}", credentialsId: 'github-tokens', url: 'https://github.com/priya-270/hr-api'
+            }
+        }
+        stage('Maven Build') {
+            steps {
+                sh 'mvn clean package'
+            }
+        }
+        stage('Tomcat Deploy') {
+            steps {
+              tomcatdeploy("ec2-user","172.31.47.217","tomcat-dev")
+        }
+        
+    }
+}
+    
